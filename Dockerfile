@@ -10,7 +10,7 @@ RUN mkdir /code
 
 WORKDIR /code
 
-ADD src/requirements.txt /code/
+ADD requirements.txt /code/
 
 RUN pip install -r requirements.txt && apk del .build-deps
 

@@ -1,36 +1,61 @@
 import os
+import sys
 
 
 DEBUG = True
+APPLICATION_NAME = os.environ.get('APPLICATION_NAME')
+
 LOG_ROOT = os.environ.get("LOG_ROOT")
-LOG_FILENAME = "{}.log".format(os.environ.get("APPLICATION_NAME"))
+LOG_FILENAME = "{}.log".format(APPLICATION_NAME)
 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
         'default': {
-            'format': '%(asctime)s %(levelname)s %(name)s %(message)s'
+            'format': '[%(asctime)s %(levelname)s] %(traceid)s '
+                      '%(name)s %(message)s'
+        },
+    },
+    'filters': {
+        'trace_id_filter': {
+            '()': 'utils.loggers.TraceIdFilter'
         }
     },
     'handlers': {
         'default': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
+            'class': 'utils.loggers.MakeFileHandler',
             'formatter': 'default',
             'encoding': 'utf-8',
-            'filename': os.path.join(LOG_ROOT, LOG_FILENAME)
-        }
-    },
-    'loggers': {
-        'default': {
-            'handlers': ['default'],
+            'filename': os.path.join(LOG_ROOT, LOG_FILENAME),
+            'filters': ['trace_id_filter'],
+        },
+        'console': {
             'level': 'DEBUG',
-            'propogate': True,
-        }
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+            'formatter': 'default',
+            'filters': ['trace_id_filter'],
+        },
+    },
+    'root': {
+        'handlers': ['console', 'default'],
+        'level': 'DEBUG',
     }
 }
 
 
 CELERY_BROKER_URL = 'redis://broker:6379/0'
 CELERY_RESULT_BACKEND = 'redis://broker:6379/0'
+CELERYD_HIJACK_ROOT_LOGGER = False
+
+# Mongo database settings
+
+MONGO_SETTINGS = {
+    'DB_NAME': os.environ.get('DATABASE_NAME'),
+    'HOST': os.environ.get('DATABASE_HOST'),
+    'PORT': int(os.environ.get('DATABASE_PORT')),
+    'USERNAME': os.environ.get('DATABASE_USERNAME'),
+    'PASSWORD': os.environ.get('DATABASE_PASSWORD')
+}

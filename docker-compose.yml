@@ -1,13 +1,22 @@
 version: '2'
 
 services:
+  # mongo database
+  db:
+    image: mongo:3.6
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/mongodb:/data/db
+    command: --smallfiles --auth --storageEngine wiredTiger
+
   # redis broker or cache
   broker:
     image: redis:alpine
     ports:
       - "6379:6379"
     volumes:
-      - ./data:/data
+      - ./data/redis:/data
     command: --appendonly yes
 
   # celery service
@@ -25,11 +34,18 @@ services:
           echo sleeping for broker;
           sleep 1;
         done;
+        while ! nc -z db 27017;
+        do
+          echo sleeping for database;
+          sleep 1;
+        done;
+
         su -m celery -c 'celery -A app.celery worker --loglevel=info'
       "
     depends_on:
       - broker
       - web
+      - db
 
   # web service for flask application
   web:
@@ -41,6 +57,18 @@ services:
       local.env
     command: >
       /bin/ash -c "
+        while ! nc -z broker 6379;
+        do
+          echo sleeping for broker;
+          sleep 1;
+        done;
+
+        while ! nc -z db 27017;
+        do
+          echo sleeping for database;
+          sleep 1;
+        done;
+
         flask run --host=0.0.0.0
       "
     volumes:
@@ -50,3 +78,4 @@ services:
       - "8400:5000"
     depends_on:
       - broker
+      - db
