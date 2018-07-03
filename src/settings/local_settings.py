@@ -4,9 +4,12 @@ import sys
 
 DEBUG = True
 APPLICATION_NAME = os.environ.get('APPLICATION_NAME')
+BASE_PATH = os.path.dirname(os.path.dirname(__file__))
 
 LOG_ROOT = os.environ.get("LOG_ROOT")
 LOG_FILENAME = "{}.log".format(APPLICATION_NAME)
+
+# Logging configuration
 
 LOGGING = {
     'version': 1,
@@ -45,6 +48,7 @@ LOGGING = {
     }
 }
 
+# Celery Configuration
 
 CELERY_BROKER_URL = 'redis://broker:6379/0'
 CELERY_RESULT_BACKEND = 'redis://broker:6379/0'
@@ -57,5 +61,28 @@ MONGO_SETTINGS = {
     'HOST': os.environ.get('DATABASE_HOST'),
     'PORT': int(os.environ.get('DATABASE_PORT')),
     'USERNAME': os.environ.get('DATABASE_USERNAME'),
-    'PASSWORD': os.environ.get('DATABASE_PASSWORD')
+    'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+}
+
+# Protofiles Namespace Setup (PNS)
+# ================================
+# if a particular microservice uses any other protofile from
+# a different microservice then all the configuration will come
+# here and will be entered as:
+# {
+#    'content': [{
+#        'file_path': '',
+#        'message_name': '',
+#    }]
+# }
+
+PROTOFILES_DIRECTORY = os.path.join(BASE_PATH, 'protobuf')
+DESCRIPTORS_DIRECTORY = os.path.join(BASE_PATH, 'descriptors')
+
+EXTERNAL_PROTOBUF_CONFIG = {}
+INTERNAL_PROTOBUF_CONFIG = {
+    'scaffolding': [{
+        'file_path': os.path.join(PROTOFILES_DIRECTORY, 'scaffolding.proto'),
+        'message_name': 'Scaffolding'
+    }]
 }

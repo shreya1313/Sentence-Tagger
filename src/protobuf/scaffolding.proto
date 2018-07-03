@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package scaffolding;
+
+message Scaffolding {
+	string name = 1;
+	enum scaffolding_enum {
+		enum0 = 0;
+		enum1 = 1;
+	}
+	scaffolding_enum scaffolding_type = 4;
+}

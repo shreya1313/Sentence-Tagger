@@ -22,6 +22,8 @@ with application.app_context():
         delete_trace_id_middleware
     from utils.celery_signals import set_trace_id_arg, set_trace_id_local, \
         delete_trace_id_local
+    from utils.service_handler import download_external_proto_files, \
+        compile_proto_files
     from scripts import ALL_CLI_COMMANDS
 
     for cli_name, cli_command in ALL_CLI_COMMANDS.items():
@@ -29,18 +31,27 @@ with application.app_context():
 
     logging.config.dictConfig(application.config["LOGGING"])
 
+    # downloading external proto files from specified microservices
+    download_external_proto_files()
+
+    # compile proto files in the descriptors directory
+    compile_proto_files()
+
 
 # Adding all the url rules in the api application
 for url, view, methods, _ in all_urls:
     application.add_url_rule(url, view_func=view, methods=methods)
 
+# Celery Configuration and setting up the log trace id signals
+
 celery = Celery(application.name,
                 broker=application.config['CELERY_BROKER_URL'])
 
-celery.conf.update(application.config)
 signals.before_task_publish.connect(set_trace_id_arg)
 signals.task_prerun.connect(set_trace_id_local)
 signals.task_postrun.connect(delete_trace_id_local)
+
+celery.conf.update(application.config)
 
 
 # establishing mongo connection for the entire lifecycle of the project
@@ -52,7 +63,6 @@ mongoengine.connect(
     password=application.config['MONGO_SETTINGS']['PASSWORD'],
 )
 
-print("Connected to database!!!")
-
+# adding the middlewares for flask application
 application.before_request(set_trace_id_middleware)
 application.after_request(delete_trace_id_middleware)

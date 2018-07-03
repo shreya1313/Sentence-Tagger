@@ -1,6 +1,7 @@
 FROM python:3.6-alpine
 
-RUN apk add --no-cache --virtual .build-deps build-base
+RUN apk add --no-cache --virtual .build-deps build-base && \
+    apk add --no-cache --virtual .runtime-deps protobuf
 
 ENV PYTHONUNBUFFERED 1
 
