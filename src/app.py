@@ -25,6 +25,9 @@ with application.app_context():
     from utils.service_handler import download_external_proto_files, \
         compile_proto_files
     from scripts import ALL_CLI_COMMANDS
+    from utils.error_handler import handle_invalid_usage
+
+    application.register_error_handler(500, handle_invalid_usage)
 
     for cli_name, cli_command in ALL_CLI_COMMANDS.items():
         application.cli.add_command(cli_command, name=cli_name)

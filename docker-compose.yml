@@ -69,7 +69,7 @@ services:
           sleep 1;
         done;
 
-        flask run --host=0.0.0.0
+        gunicorn --bind=0.0.0.0:5000 -w 2 app
       "
     volumes:
       - ./src/:/code

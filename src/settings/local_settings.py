@@ -2,9 +2,11 @@ import os
 import sys
 
 
-DEBUG = True
+DEBUG = False
 APPLICATION_NAME = os.environ.get('APPLICATION_NAME')
 BASE_PATH = os.path.dirname(os.path.dirname(__file__))
+ENVIRONMENT = os.environ.get('ENVIRONMENT')
+
 
 LOG_ROOT = os.environ.get("LOG_ROOT")
 LOG_FILENAME = "{}.log".format(APPLICATION_NAME)
