@@ -4,6 +4,7 @@ from celery import Celery, signals
 import os
 import logging.config
 import mongoengine
+from utils.encoder import JSONEnumEncoder
 
 
 application = Flask(os.environ.get("APPLICATION_NAME"))
@@ -56,6 +57,8 @@ signals.task_postrun.connect(delete_trace_id_local)
 
 celery.conf.update(application.config)
 
+# changing the encoder to enum encoder
+application.json_encoder = JSONEnumEncoder
 
 # establishing mongo connection for the entire lifecycle of the project
 mongoengine.connect(
