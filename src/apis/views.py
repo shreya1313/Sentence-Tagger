@@ -1,6 +1,8 @@
 import logging
 from tasks import test_task
 from flask import current_app as app
+from utils.pbj import api, protobuf
+from descriptors.scaffolding_pb2 import Scaffolding
 
 
 logger = logging.getLogger(__name__)
@@ -24,3 +26,14 @@ def error():
     a = [0, 1]
 
     return a[10]
+
+
+@api(protobuf(sends=Scaffolding))
+def proto():
+    """
+    api view for testing protobuf serialization/deserialization
+    """
+
+    data = {'name': 'Test Proto', 'scaffolding_type': 1}
+
+    return data
