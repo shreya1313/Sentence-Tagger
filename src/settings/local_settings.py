@@ -88,3 +88,12 @@ INTERNAL_PROTOBUF_CONFIG = {
         'message_name': 'Scaffolding'
     }]
 }
+
+
+# Redis Cache Configuration
+CACHE_CONFIGURATION = {
+    'CACHE_TYPE': 'redis',
+    'CACHE_REDIS_HOST': os.environ.get('CACHE_REDIS_HOST'),
+    'CACHE_REDIS_PORT': int(os.environ.get('CACHE_REDIS_PORT')),
+    'CACHE_REDIS_DB': int(os.environ.get('CACHE_REDIS_DB')),
+}

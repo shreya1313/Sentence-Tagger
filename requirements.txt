@@ -1,5 +1,6 @@
 celery==4.1.1
-Flask==0.12.2
+Flask==1.0.2
+flask-caching==1.4.0
 flask-shell-ipython==0.3.0
 gunicorn==19.7.1
 ipdb==0.10.3
