@@ -62,6 +62,7 @@ application.json_encoder = JSONEnumEncoder
 
 # establishing mongo connection for the entire lifecycle of the project
 mongoengine.connect(
+    alias='default',
     db=application.config['MONGO_SETTINGS']['DB_NAME'],
     host=application.config['MONGO_SETTINGS']['HOST'],
     port=application.config['MONGO_SETTINGS']['PORT'],
