@@ -1,6 +1,6 @@
 from apis.views import proto
 from flask import current_app as app
-from descriptors.scaffolding_pb2 import Scaffolding
+from descriptors import Scaffolding
 
 
 with app.test_request_context(

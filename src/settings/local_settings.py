@@ -2,10 +2,10 @@ import os
 import sys
 
 
-DEBUG = False
+DEBUG = True
 APPLICATION_NAME = os.environ.get('APPLICATION_NAME')
 BASE_PATH = os.path.dirname(os.path.dirname(__file__))
-ENVIRONMENT = os.environ.get('ENVIRONMENT')
+ENVIRONMENT = os.environ.get('FLASK_ENV')
 
 
 LOG_ROOT = os.environ.get("LOG_ROOT")

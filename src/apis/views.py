@@ -34,6 +34,6 @@ def proto():
     api view for testing protobuf serialization/deserialization
     """
 
-    data = {'name': 'Test Proto', 'scaffolding_type': 1}
+    data = {'name': 'Flask Scaffolding', 'scaffolding_type': 1}
 
     return data

@@ -64,13 +64,16 @@ def validate_protobuf_request(message_name, payload):
     descriptor = getattr(module, message_name)
 
     try:
-        descriptor(**payload)
+        message_obj = descriptor(**payload)
+        serialized_data = message_obj.SerializeToString()
+
+        return serialized_data, True
     except Exception as exc:
         logger.error('Validation failed for {} with payload {}'.format(
             message_name, payload
         ))
 
-        return repr(exc)
+        return exc.args[0], False
 
 
 def perform_microservice_request(method, endpoint, payload={},
@@ -85,28 +88,24 @@ def perform_microservice_request(method, endpoint, payload={},
     service
     """
 
-    if method == 'GET':
-        response = requests.get(endpoint, params=query_params,
-                                headers=headers)
+    headers.update({
+        'Content-Type': 'application/x-protobuf',
+        'Accept': 'application/x-protobuf',
+    })
 
-        try:
-            return response.json(), response.status_code
-        except Exception:
-            return {}, response.status_code
+    message = None
 
-    if method == 'POST':
-        if message_name:
-            response = validate_protobuf_request(message_name, payload)
+    if method in ['POST', 'PUT']:
+        message, validation_status = validate_protobuf_request(
+                message_name, payload)
 
-            return {'errorMessage': response}, 400
+        if not validation_status:
+            return {'errorMessage': message}, 400
 
-        if 'Content-Type' not in headers:
-            headers.update({'Content-Type': 'application/json'})
+    response = requests.request(method=method, url=endpoint, data=message,
+                                headers=headers, params=query_params)
 
-        response = requests.post(endpoint, data=payload,
-                                 headers=headers)
-
-        try:
-            return response.json(), response.status_code
-        except Exception:
-            return {}, response.status_code
+    try:
+        return response.json(), response.status_code
+    except Exception:
+        return {}, response.status_code

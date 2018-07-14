@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 def handle_invalid_usage(error):
-    response = jsonify({'errorMessage': repr(error)})
+    response = jsonify({'errorMessage': error.args[0]})
 
     logger.error(
         'following error raised: {}'.format(
