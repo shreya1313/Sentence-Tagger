@@ -2,7 +2,7 @@ import logging
 from tasks import test_task
 from flask import current_app as app
 from utils.pbj import api, protobuf
-from descriptors.scaffolding_pb2 import Scaffolding
+from descriptors import Scaffolding
 
 
 logger = logging.getLogger(__name__)

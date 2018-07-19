@@ -81,14 +81,7 @@ MONGO_SETTINGS = {
 PROTOFILES_DIRECTORY = os.path.join(BASE_PATH, 'protobuf')
 DESCRIPTORS_DIRECTORY = os.path.join(BASE_PATH, 'descriptors')
 
-EXTERNAL_PROTOBUF_CONFIG = {}
-INTERNAL_PROTOBUF_CONFIG = {
-    'scaffolding': [{
-        'file_path': os.path.join(PROTOFILES_DIRECTORY, 'scaffolding.proto'),
-        'message_name': 'Scaffolding'
-    }]
-}
-
+EXTERNAL_PROTOBUF_CONFIG = []
 
 # Redis Cache Configuration
 CACHE_CONFIGURATION = {

@@ -13,36 +13,13 @@ proto configurations not mentioned cannot be imported.
 from flask import current_app as app
 from google.protobuf.internal.python_message import \
     GeneratedProtocolMessageType
-import itertools
 import importlib
 from functools import reduce
+import os
 
 
-externals = app.config['EXTERNAL_PROTOBUF_CONFIG']
-internals = app.config['INTERNAL_PROTOBUF_CONFIG']
-
-external_protos = []
-internal_protos = []
-
-
-def get_all_file_names(config_list):
-    """
-    returns all the file names
-    """
-
-    def convert_proto_to_descriptor_file(filename):
-        return '{}_pb2'.format(filename.split('.')[0])
-
-    files = reduce(lambda a, x: a + x, config_list, [])
-
-    all_urls = map(lambda datum: datum.get('file_path'),
-                   files)
-
-    all_urls = [url.split('/')[-1] for url in all_urls if url]
-
-    descriptors_files = list(map(convert_proto_to_descriptor_file, all_urls))
-
-    return descriptors_files
+def convert_proto_to_descriptor_file(filename):
+    return '{}_pb2'.format(filename.split('.')[0])
 
 
 def get_message_objects(module_name):
@@ -64,21 +41,11 @@ def get_message_objects(module_name):
     return messages
 
 
-if externals:
-    all_names = get_all_file_names(list(externals.values()))
+all_proto_files = os.listdir(app.config['PROTOFILES_DIRECTORY'])
+descriptor_files = list(map(convert_proto_to_descriptor_file,
+                            all_proto_files))
+all_messages = list(map(get_message_objects, descriptor_files))
+messages = reduce(lambda a, x: a + x, all_messages, [])
 
-    all_messages = map(get_message_objects, all_names)
-
-    external_protos = reduce(lambda a, x: a + x, all_messages, [])
-
-
-if internals:
-    all_names = get_all_file_names(list(internals.values()))
-
-    all_messages = map(get_message_objects, all_names)
-
-    internal_protos = reduce(lambda a, x: a + x, all_messages, [])
-
-
-for proto in itertools.chain(external_protos, internal_protos):
-    globals().update({proto[0]: proto[1]})
+for message in messages:
+    globals().update({message[0]: message[1]})

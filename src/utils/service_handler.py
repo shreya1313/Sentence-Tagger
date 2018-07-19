@@ -44,11 +44,7 @@ def download_external_proto_files():
     if not externals:
         return
 
-    all_protofiles = reduce(lambda a, x: a + x, externals.values(), [])
-    all_protofile_urls = [datum.get('file_path')
-                          for datum in all_protofiles]
-
-    for url in all_protofile_urls:
+    for url in externals:
         file_name = url.split('/')[-1]
         file_path = os.path.join(protofiles_dir, file_name)
 
