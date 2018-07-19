@@ -1,6 +1,7 @@
 import logging
 from tasks import test_task
 from flask import current_app as app
+from flask import send_from_directory
 from utils.pbj import api, protobuf
 from descriptors import Scaffolding
 
@@ -26,6 +27,17 @@ def error():
     a = [0, 1]
 
     return a[10]
+
+
+def serve_proto_files(name):
+    """
+    serves the proto files easily accessible to other microservices
+    or gateways
+    """
+
+    proto_dir = app.config['PROTOFILES_DIRECTORY']
+
+    return send_from_directory(proto_dir, name)
 
 
 @api(protobuf(sends=Scaffolding))

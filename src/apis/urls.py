@@ -5,6 +5,8 @@ from flask import current_app as app
 api_urls = [
     ("/", views.index, ["GET"], "flask scaffolding index url"),
     ("/error", views.error, ["GET"], "testing 500 as json"),
+    ("/proto/<name>", views.serve_proto_files, ["GET"],
+     "serve proto files"),
     ("/proto-test", views.proto, ['GET'], 'testing proto requests')
 ]
 
