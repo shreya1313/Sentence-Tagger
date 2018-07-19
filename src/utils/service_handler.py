@@ -1,10 +1,9 @@
 import requests
 from flask import current_app as app
-from functools import reduce
+from utils.pbj import copy_pb_to_dict
 import urllib
 import os
 import subprocess
-import importlib
 import logging
 
 
@@ -51,30 +50,43 @@ def download_external_proto_files():
         urllib.request.urlretrieve(url, file_path)
 
 
-def validate_protobuf_request(message_name, payload):
+def validate_protobuf_request(message, payload):
     """
     validates the protobuf validations
     """
 
-    module = importlib.import_module('descriptors')
-    descriptor = getattr(module, message_name)
-
     try:
-        message_obj = descriptor(**payload)
+        message_obj = message(**payload)
         serialized_data = message_obj.SerializeToString()
 
         return serialized_data, True
     except Exception as exc:
         logger.error('Validation failed for {} with payload {}'.format(
-            message_name, payload
+            message, payload
         ))
 
         return exc.args[0], False
 
 
-def perform_microservice_request(method, endpoint, payload={},
-                                 query_params={}, headers={},
-                                 message_name=''):
+def parse_response_data(response, response_message):
+    """
+    parses the response data into the dictionary object
+    """
+
+    message = response_message()
+
+    message.ParseFromString(response.content)
+
+    data_dict = {}
+
+    copy_pb_to_dict(data_dict, message)
+
+    return data_dict
+
+
+def perform_microservice_request(method, endpoint, response_message=None,
+                                 request_message=None, payload={},
+                                 query_params={}, headers={}):
     """
     this function performs the microservice requests
     given certain parameters and returns the output
@@ -93,15 +105,14 @@ def perform_microservice_request(method, endpoint, payload={},
 
     if method in ['POST', 'PUT']:
         message, validation_status = validate_protobuf_request(
-                message_name, payload)
+                request_message, payload)
 
         if not validation_status:
-            return {'errorMessage': message}, 400
+            return {'errorMessage': message}
 
     response = requests.request(method=method, url=endpoint, data=message,
                                 headers=headers, params=query_params)
 
-    try:
-        return response.json(), response.status_code
-    except Exception:
-        return {}, response.status_code
+    output = parse_response_data(response, response_message)
+
+    return output
