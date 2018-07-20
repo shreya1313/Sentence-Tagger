@@ -1,5 +1,5 @@
 from __future__ import absolute_import, unicode_literals
-from common.blueprint_app import bootstrap_app
+from common.bootstrap_app import bootstrap_app
 from scripts import ALL_CLI_COMMANDS
 import mongoengine
 
