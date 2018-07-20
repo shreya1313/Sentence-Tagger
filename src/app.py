@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 from common.blueprint_app import bootstrap_app
+from scripts import ALL_CLI_COMMANDS
 import mongoengine
 
 
@@ -14,3 +15,7 @@ mongoengine.connect(
     username=application.config['MONGO_SETTINGS']['USERNAME'],
     password=application.config['MONGO_SETTINGS']['PASSWORD'],
 )
+
+
+for cli_name, cli_command in ALL_CLI_COMMANDS.items():
+    application.cli.add_command(cli_command, name=cli_name)
