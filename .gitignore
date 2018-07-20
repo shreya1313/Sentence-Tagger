@@ -103,3 +103,4 @@ ENV/
 *.swp
 data
 .pytest_cache
+*_pb2.py
