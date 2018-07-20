@@ -1,0 +1,3 @@
+[submodule "src/common"]
+	path = src/common
+	url = https://arpitgoyalthunderbird@bitbucket.org/spotmentordev/common-skeleton

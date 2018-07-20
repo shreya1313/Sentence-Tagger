@@ -1,1 +1,1 @@
-from settings.common import *
+from common.settings.common_settings import *

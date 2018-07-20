@@ -1,9 +1,9 @@
 from __future__ import absolute_import, unicode_literals
-from blueprint_app import create_blueprint_app
+from common.blueprint_app import bootstrap_app
 import mongoengine
 
 
-application = create_blueprint_app()
+application = bootstrap_app()
 
 # establishing mongo connection for the entire lifecycle of the project
 mongoengine.connect(
