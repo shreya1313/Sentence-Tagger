@@ -1,7 +1,6 @@
-FROM python:3.6-alpine
+FROM spotmentor/alpine-protobuf:1.0.0 
 
-RUN apk add --no-cache --virtual .build-deps build-base && \
-    apk add --no-cache --virtual .runtime-deps protobuf
+RUN apk add --no-cache --virtual .build-deps build-base
 
 ENV PYTHONUNBUFFERED 1
 
