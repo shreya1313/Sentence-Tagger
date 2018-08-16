@@ -1,4 +1,4 @@
-from common.settings.common_settings import *
+from common.settings.common_settings import *  # noqa
 import os
 
 
@@ -8,3 +8,8 @@ PROTOFILES_DIRECTORY = os.path.join(BASE_PATH, 'protobuf')
 DESCRIPTORS_DIRECTORY = os.path.join(BASE_PATH, 'descriptors')
 
 EXTERNAL_PROTOBUF_CONFIG = []
+
+DEBUG = False
+
+# ElasticSearch Configuration
+USE_ES = False

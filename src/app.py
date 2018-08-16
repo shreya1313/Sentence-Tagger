@@ -4,7 +4,7 @@ from scripts import ALL_CLI_COMMANDS
 import mongoengine
 
 
-application = bootstrap_app()
+application, celery = bootstrap_app()
 
 # establishing mongo connection for the entire lifecycle of the project
 mongoengine.connect(
