@@ -16,6 +16,12 @@ from google.protobuf.internal.python_message import \
 import importlib
 from functools import reduce
 import os
+import sys
+
+
+# adds this directory in the path
+current_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(current_path)
 
 
 def convert_proto_to_descriptor_file(filename):
@@ -41,10 +47,16 @@ def get_message_objects(module_name):
     return messages
 
 
-all_proto_files = os.listdir(app.config['PROTOFILES_DIRECTORY'])
+all_proto_files = [
+    f for dp, dn, filenames in os.walk(app.config['PROTOFILES_DIRECTORY'])
+    for f in filenames if os.path.splitext(f)[1] == '.proto'
+]
+
 descriptor_files = list(map(convert_proto_to_descriptor_file,
                             all_proto_files))
+
 all_messages = list(map(get_message_objects, descriptor_files))
+
 messages = reduce(lambda a, x: a + x, all_messages, [])
 
 for message in messages:
