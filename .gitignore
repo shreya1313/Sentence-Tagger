@@ -104,4 +104,5 @@ ENV/
 data
 .pytest_cache
 *_pb2.py
-src/protobuf/externals
+protobuf/
+descriptors/
