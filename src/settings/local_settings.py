@@ -7,6 +7,7 @@ DEBUG = False
 
 # Protofiles Settings
 PROTOFILES_DIRECTORY = os.path.join(BASE_PATH, 'protobuf')
+DESCRIPTORS_DIRECTORY = os.path.join(BASE_PATH, 'descriptors')
 PROTOFILES_NEEDED += []
 
 # ElasticSearch Configuration
