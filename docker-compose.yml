@@ -10,14 +10,21 @@ services:
       - ./data/mongodb:/data/db
     command: --smallfiles --storageEngine wiredTiger
 
-  # redis broker or cache
-  broker:
+  # redis cache
+  cache:
     image: redis:alpine
     ports:
       - "6379:6379"
     volumes:
       - ./data/redis:/data
     command: --appendonly yes
+
+  # redis cache
+  broker:
+    image: rabbitmq:3.6-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
 
   # celery service
   worker:
@@ -29,14 +36,19 @@ services:
       local.env
     command: >
       /bin/ash -c "
-        while ! nc -z broker 6379;
+        while ! nc -z cache 6379;
         do
-          echo sleeping for broker;
+          echo sleeping for cache;
           sleep 1;
         done;
         while ! nc -z db 27017;
         do
           echo sleeping for database;
+          sleep 1;
+        done;
+        while ! nc -z broker 5672;
+        do
+          echo sleeping for broker;
           sleep 1;
         done;
 
@@ -57,15 +69,19 @@ services:
       local.env
     command: >
       /bin/ash -c "
-        while ! nc -z broker 6379;
+        while ! nc -z cache 6379;
         do
-          echo sleeping for broker;
+          echo sleeping for cache;
           sleep 1;
         done;
-
         while ! nc -z db 27017;
         do
           echo sleeping for database;
+          sleep 1;
+        done;
+        while ! nc -z broker 5672;
+        do
+          echo sleeping for broker;
           sleep 1;
         done;
 
