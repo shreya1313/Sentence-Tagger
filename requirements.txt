@@ -1,4 +1,5 @@
 celery==4.1.1
+celery-message-consumer==1.0.10
 Flask==1.0.2
 flask-caching==1.4.0
 flask-shell-ipython==0.3.0
