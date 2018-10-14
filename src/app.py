@@ -1,20 +1,9 @@
 from __future__ import absolute_import, unicode_literals
 from common.bootstrap_app import bootstrap_app
 from scripts import ALL_CLI_COMMANDS
-import mongoengine
 
 
 application, celery = bootstrap_app()
-
-# establishing mongo connection for the entire lifecycle of the project
-mongoengine.connect(
-    alias='default',
-    db=application.config['MONGO_SETTINGS']['DB_NAME'],
-    host=application.config['MONGO_SETTINGS']['HOST'],
-    port=application.config['MONGO_SETTINGS']['PORT'],
-    username=application.config['MONGO_SETTINGS']['USERNAME'],
-    password=application.config['MONGO_SETTINGS']['PASSWORD'],
-)
 
 
 for cli_name, cli_command in ALL_CLI_COMMANDS.items():

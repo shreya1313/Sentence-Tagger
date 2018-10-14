@@ -1,4 +1,4 @@
-FROM spotmentor/alpine-protobuf:1.0.0 
+FROM spotmentor/alpine-protobuf:1.0.0
 
 RUN apk add --no-cache --virtual .build-deps build-base
 
