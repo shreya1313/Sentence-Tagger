@@ -3,7 +3,7 @@ from common.bootstrap_app import bootstrap_app
 from scripts import ALL_CLI_COMMANDS
 
 
-application, celery = bootstrap_app()
+application, celery, cache = bootstrap_app()
 
 
 for cli_name, cli_command in ALL_CLI_COMMANDS.items():

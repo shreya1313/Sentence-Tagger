@@ -17,3 +17,5 @@ RUN pip install --no-cache-dir -r requirements.txt && apk del .build-deps
 ADD src/ /code/
 
 RUN adduser -D -u 1001 -g 1001 celery
+
+ENTRYPOINT ["/code/common/startup.sh"]
