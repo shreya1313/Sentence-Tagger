@@ -1,10 +1,6 @@
 from common.settings.common_settings import *  # noqa
 from common.utils.event_conf import generate_consumer_exchange_configuration
-import os
 
-
-BASE_PATH = os.path.dirname(os.path.dirname(__file__))
-DEBUG = False
 
 # ElasticSearch Configuration
 USE_ES = False
