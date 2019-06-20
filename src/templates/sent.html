@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TAGGING WALA PAGE</title>
+</head>
+<style>
+li {
+  /*border-left: 6px hsla(150,150,0,0.7);*/
+  border-radius: 8px;
+  /*background-color: lightgrey;*/
+  background-color:hsla(200,100%,25%,0.3);
+}
+body{
+  background-color: lightgrey;
+  /*background:url(paper.gif);*/
+}
+h1{
+  text-shadow: 0 0 3px #FF0000;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.left, .right {
+  width: 50%;
+}
+
+.listItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px
+}
+
+.listItem > textarea {
+  display: flex;
+  width: 80%;
+  height: 50px;
+}
+
+.listItem > select {
+  display: flex;
+  width: 20%;
+  height: auto;
+}
+</style>
+<body>
+  <div class="wrapper">
+    <div class="left">
+        <h1 style = "text-align: center;">FOR REFERENCE</h1> <br><br>      
+      {{jd_html}}
+    </div>
+    <div class="right">
+      <h1 style = "text-align: center;">SENTENCES TO BE TAGGED</h1><br><br>
+      <form method="POST">
+        <fieldset>
+          <legend>Tagging Form</legend>
+          {% if not tagged %}
+            <div style= "font-size:15px; font-weight:italic;">
+              {%for i in form.tag_list%}
+              <li class="listItem">
+                {{i.sentence(readonly=true)}}
+                {{i.tag}}
+              </li>
+              {%endfor%}
+              <br>
+              
+              <input type="submit" value="Save">
+            </div>
+          {%endif%}
+        </fieldset>
+      </form>
+    </div>
+  </div>
+    {% if tagged %}
+      <div><b><marquee> Submitted </marquee></b></div>
+    {% endif %}
+    
+    
+</body>
+</html>
