@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>JD'S ki DUNIYA</title>
+	<title>JD Page</title>
 </head>
 <style type="text/css">
 	body {
@@ -136,10 +136,13 @@ function checkbutton() {
   <div class="pagination">
   
   <a href="{{previous_url}}" class="w3-button">&laquo;</a>
-	{% for i in range(10)%}
-		<!-- <a href="{{numbers}}{{i}}">{{i}}</a> -->
-  <a href="{{numbers}}{{i+page}}">{{i+page}}</a>
-  {%endfor%} 
+ 
+    {%for number in (numbers)%}
+      
+        <a href="{{number}}">{{page+loop.index-1}}</a>
+     
+    {%endfor%} 
+  
   <a href="{{next_url}}" class="w3-button">&raquo;</a>
   
   </div>

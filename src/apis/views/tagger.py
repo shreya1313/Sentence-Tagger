@@ -42,8 +42,8 @@ def jd():
             base_url += '?'
     next_url = edit_query_params(base_url, page + 1, b = 0)
     previous_url = edit_query_params(base_url, page - 1, b = 0)
-    numbers = edit_query_params(base_url, page, b = 0)
-    numbers = re.sub('[0-9]+$', '', numbers)
+
+    numbers = [f'{edit_query_params(base_url, i, b = 0)}' for i in range(page,page+10)]
     page_num = math.ceil(jd_len/RESULTS_PER_PAGE)
 
     url_for_tagged_untagged = edit_query_params(base_url, page, b = 1)
