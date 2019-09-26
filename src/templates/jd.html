@@ -20,6 +20,11 @@ a{
   width: 50%;
 }
 
+.not-active { 
+    pointer-events: none; 
+    cursor: default; 
+} 
+
 </style>
 <body>
 	<form class="xyz" method="GET" action="/jd">
@@ -134,17 +139,23 @@ function checkbutton() {
 <footer>
 <div class="center">
   <div class="pagination">
-  
-  <a href="{{previous_url}}" class="w3-button">&laquo;</a>
- 
+  {%if page!=1%}  
+    <a href="{{previous_url}}" class="w3-button">&laquo;</a>
+  {%else%}
+    <a href="{{previous_url}}" class="not-active">&laquo;</a>
+  {%endif%}
+
     {%for number in (numbers)%}
       
         <a href="{{number}}">{{page+loop.index-1}}</a>
      
     {%endfor%} 
   
-  <a href="{{next_url}}" class="w3-button">&raquo;</a>
-  
+  {%if page < page_num-9%}
+    <a href="{{next_url}}" class="w3-button">&raquo;</a>
+  {%else%}
+    <a href="{{next_url}}" class="not-active">&raquo;</a>
+  {%endif%}
   </div>
 </div>
 <!-- <button class="button">
